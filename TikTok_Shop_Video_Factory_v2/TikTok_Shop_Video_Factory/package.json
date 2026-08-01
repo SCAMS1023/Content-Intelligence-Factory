@@ -1,0 +1,13 @@
+{
+  "name": "tiktok-shop-video-factory",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Score a TikTok Shop product, generate 10 complete short-form video units, and export a production pack. Runs offline with no build step.",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test test/core.test.js",
+    "serve": "node tools/serve.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

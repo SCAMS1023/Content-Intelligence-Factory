@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>TikTok Shop Video Factory</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">▶</span>
+      <div>
+        <h1>TikTok Shop Video Factory</h1>
+        <p class="tagline">Score a product, generate ten shootable videos, export the pack.</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <nav class="viewnav" aria-label="Views">
+        <button type="button" class="viewbtn is-active" data-view="workbench" aria-current="page">Workbench</button>
+        <button type="button" class="viewbtn" data-view="library">
+          Library <span class="pill" id="libraryCount" aria-hidden="true">0</span>
+        </button>
+      </nav>
+      <button type="button" id="themeToggle" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ─────────────────────────────── WORKBENCH ─────────────────────────────── -->
+    <section id="view-workbench" class="view layout">
+
+      <form id="productForm" class="panel form" novalidate>
+        <div class="panel-head">
+          <h2>Product</h2>
+          <button type="button" id="loadSample" class="ghost">Load sample</button>
+        </div>
+
+        <p class="hint">Leave a field blank if you don't know it. Blank means <em>unknown</em> and lowers the confidence figure — it is not treated as zero.</p>
+
+        <div class="field">
+          <label for="productName">Product name <span class="req" aria-hidden="true">*</span></label>
+          <input id="productName" name="productName" autocomplete="off" placeholder="Ninja CREAMi" required aria-describedby="err-productName" />
+          <p class="err" id="err-productName" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="brand">Brand</label>
+          <input id="brand" name="brand" autocomplete="off" placeholder="Ninja" />
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="price">Price ($)</label>
+            <input id="price" name="price" inputmode="decimal" placeholder="59.99" aria-describedby="err-price" />
+            <p class="err" id="err-price" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="commission">Commission (%)</label>
+            <input id="commission" name="commission" inputmode="decimal" placeholder="12" aria-describedby="err-commission" />
+            <p class="err" id="err-commission" role="alert"></p>
+          </div>
+        </div>
+
+        <p class="payout-line" id="payoutLine" aria-live="polite"></p>
+
+        <div class="row">
+          <div class="field">
+            <label for="growth">7-day sales growth (%)</label>
+            <input id="growth" name="growth" inputmode="decimal" placeholder="125" aria-describedby="err-growth" />
+            <p class="err" id="err-growth" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="creators">Creators promoting it</label>
+            <input id="creators" name="creators" inputmode="numeric" placeholder="142" aria-describedby="err-creators" />
+            <p class="err" id="err-creators" role="alert"></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="rating">Star rating (0–5)</label>
+            <input id="rating" name="rating" inputmode="decimal" placeholder="4.6" aria-describedby="err-rating" />
+            <p class="err" id="err-rating" role="alert"></p>
+          </div>
+          <div class="field">
+            <label for="reviews">Review count</label>
+            <input id="reviews" name="reviews" inputmode="numeric" placeholder="3200" aria-describedby="err-reviews" />
+            <p class="err" id="err-reviews" role="alert"></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="brandMatch">Shop name matches the brand</label>
+            <select id="brandMatch" name="brandMatch">
+              <option value="">Not checked yet</option>
+              <option value="true">Yes — verified</option>
+              <option value="false">No — mismatch</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="adsActive">Brand is running ads</label>
+            <select id="adsActive" name="adsActive">
+              <option value="">Not checked yet</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="benefits">Top benefits <span class="sub">one per line</span></label>
+          <textarea id="benefits" name="benefits" rows="4" placeholder="Makes frozen desserts at home&#10;Multiple texture settings&#10;Easy countertop use"></textarea>
+          <p class="err" id="err-benefits" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label for="problem">Problem it solves</label>
+          <input id="problem" name="problem" placeholder="store-bought ice cream is expensive" />
+          <p class="hint tight">Used by the problem-first and POV hooks.</p>
+        </div>
+
+        <div class="field">
+          <label for="objection">Main hesitation buyers have</label>
+          <input id="objection" name="objection" placeholder="I thought it would be hard to clean" />
+          <p class="hint tight">Used by the objection-handling hook.</p>
+        </div>
+
+        <div class="field">
+          <label for="offer">Offer wording <span class="sub">must be verifiable</span></label>
+          <textarea id="offer" name="offer" rows="2" placeholder="Coupon shown on the product page"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="audience">Target customer</label>
+          <input id="audience" name="audience" placeholder="families and dessert lovers" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="generate" class="primary">Generate production pack</button>
+          <button type="button" id="resetForm" class="ghost">Clear</button>
+        </div>
+        <p class="hint tight" id="draftNote" aria-live="polite"></p>
+      </form>
+
+      <div class="results">
+        <div id="emptyState" class="panel empty-state">
+          <h2>Nothing generated yet</h2>
+          <p>Fill in whatever you know about the product and press <strong>Generate production pack</strong>. Only the product name is required.</p>
+          <p>You'll get an opportunity score with a full factor breakdown, ten complete video units (hook, caption, three-beat script, overlay, b-roll note, hashtags), per-video AI image and video prompts, a posting plan, and a claim-risk check.</p>
+          <button type="button" class="primary" id="emptySample">Load the sample product</button>
+        </div>
+
+        <div id="resultsBody" hidden>
+          <div class="panel score-panel">
+            <div class="score-head">
+              <div class="dial" id="dial">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="dial-track" cx="60" cy="60" r="52"></circle>
+                  <circle class="dial-value" id="dialArc" cx="60" cy="60" r="52"></circle>
+                </svg>
+                <div class="dial-text"><span id="scoreValue">0</span><small>/100</small></div>
+              </div>
+              <div class="score-meta">
+                <p class="rating" id="ratingLabel">Not scored</p>
+                <p class="confidence">
+                  Confidence <strong id="confidenceValue">0%</strong>
+                  <span class="conf-bar"><span id="confidenceBar"></span></span>
+                </p>
+                <p class="muted" id="confidenceNote"></p>
+                <div class="kpis" id="kpis"></div>
+              </div>
+            </div>
+            <div id="scoreAnnounce" class="visually-hidden" role="status" aria-live="polite"></div>
+            <div id="flags" class="flags"></div>
+
+            <details class="breakdown" id="breakdownWrap">
+              <summary>Score breakdown — how the 100 points were allocated</summary>
+              <div id="breakdown"></div>
+            </details>
+
+            <details class="projection" id="projectionWrap">
+              <summary>Earnings projection <span class="tag tag-inferred">inferred</span></summary>
+              <p class="hint">This is arithmetic on assumptions you control, not observed data. Change the inputs to match your own channel.</p>
+              <div class="row three">
+                <div class="field">
+                  <label for="projViews">Views</label>
+                  <input id="projViews" inputmode="numeric" value="10000" />
+                </div>
+                <div class="field">
+                  <label for="projCtr">Click-through (%)</label>
+                  <input id="projCtr" inputmode="decimal" value="2" />
+                </div>
+                <div class="field">
+                  <label for="projCvr">Conversion (%)</label>
+                  <input id="projCvr" inputmode="decimal" value="3" />
+                </div>
+              </div>
+              <p class="projection-out" id="projectionOut" aria-live="polite"></p>
+            </details>
+          </div>
+
+          <div class="panel output-panel">
+            <div class="panel-head">
+              <div class="tabs" role="tablist" aria-label="Production pack sections">
+                <button type="button" role="tab" class="tab is-active" id="tab-videos" data-tab="videos" aria-selected="true" aria-controls="tabpanel" tabindex="0">Videos</button>
+                <button type="button" role="tab" class="tab" id="tab-prompts" data-tab="prompts" aria-selected="false" aria-controls="tabpanel" tabindex="-1">AI prompts</button>
+                <button type="button" role="tab" class="tab" id="tab-plan" data-tab="plan" aria-selected="false" aria-controls="tabpanel" tabindex="-1">Posting plan</button>
+                <button type="button" role="tab" class="tab" id="tab-compliance" data-tab="compliance" aria-selected="false" aria-controls="tabpanel" tabindex="-1">
+                  Claim check <span class="pill pill-warn" id="complianceCount" hidden>0</span>
+                </button>
+                <button type="button" role="tab" class="tab" id="tab-checklist" data-tab="checklist" aria-selected="false" aria-controls="tabpanel" tabindex="-1">Checklist</button>
+              </div>
+              <button type="button" id="reshuffle" class="ghost" title="Generate a different set of copy variants">↻ Reshuffle copy</button>
+            </div>
+
+            <div id="tabpanel" role="tabpanel" aria-labelledby="tab-videos" tabindex="0" class="output"></div>
+
+            <div class="actions">
+              <button type="button" id="saveToLibrary" class="primary">Save to library</button>
+              <button type="button" id="copyTab" class="ghost">Copy this tab</button>
+              <button type="button" id="downloadCsv" class="ghost">CSV</button>
+              <button type="button" id="downloadMd" class="ghost">Markdown</button>
+              <button type="button" id="downloadJson" class="ghost">JSON</button>
+              <button type="button" id="printPack" class="ghost">Print</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────────── LIBRARY ─────────────────────────────── -->
+    <section id="view-library" class="view" hidden>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Product library</h2>
+          <div class="panel-head-actions">
+            <label class="inline-field">
+              <span>Sort</span>
+              <select id="librarySort">
+                <option value="score">Score</option>
+                <option value="payout">Commission per sale</option>
+                <option value="saved">Recently saved</option>
+                <option value="name">Name</option>
+              </select>
+            </label>
+            <button type="button" id="exportLibrary" class="ghost">Export CSV</button>
+          </div>
+        </div>
+        <p class="hint">Saved on this device only, in browser storage. Nothing is uploaded anywhere. Deleting moves an entry to the trash below so you can undo it.</p>
+        <div id="libraryList"></div>
+      </div>
+
+      <div class="panel" id="trashPanel" hidden>
+        <div class="panel-head">
+          <h2>Trash</h2>
+          <button type="button" id="emptyTrash" class="ghost danger">Empty trash</button>
+        </div>
+        <div id="trashList"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Runs entirely in your browser. No account, no API key, no network requests. <strong>Claim checks are a drafting aid, not legal advice</strong> — verify every price, coupon and claim against the live listing before you post.</p>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="src/core/rng.js"></script>
+  <script src="src/core/validation.js"></script>
+  <script src="src/core/scoring.js"></script>
+  <script src="src/core/content.js"></script>
+  <script src="src/core/prompts.js"></script>
+  <script src="src/core/compliance.js"></script>
+  <script src="src/core/pack.js"></script>
+  <script src="src/core/exporters.js"></script>
+  <script src="src/core/store.js"></script>
+  <script src="src/ui/dom.js"></script>
+  <script src="src/ui/app.js"></script>
+</body>
+</html>
