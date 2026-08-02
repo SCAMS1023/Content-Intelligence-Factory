@@ -1,0 +1,14 @@
+"use strict";
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const Import = require("../src/plugins/youtube-intelligence/manual-import.js");
+const Analysis = require("../src/plugins/youtube-intelligence/analysis.js");
+const Plugin = require("../src/plugins/youtube-intelligence/plugin.js");
+const Registry = require("../src/core/plugin-registry.js");
+test("YouTube plugin metadata is valid and offline-disabled", () => { assert.equal(Registry.validate(Plugin).valid, true); assert.equal(Plugin.enabled, false); });
+test("YouTube URL intake accepts common video forms and rejects other hosts", () => { assert.equal(Import.parseUrl("https://youtu.be/abc123").videoId, "abc123"); assert.equal(Import.parseUrl("https://www.youtube.com/shorts/xyz").videoId, "xyz"); assert.throws(() => Import.parseUrl("https://example.com/watch?v=x"), /youtube/); });
+test("bulk intake removes exact duplicate URLs", () => { assert.equal(Import.bulkUrls("https://youtu.be/a\nhttps://youtu.be/a\nhttps://youtu.be/b").length, 2); });
+test("manual transcript import records provenance and limits size", () => { const t = Import.transcript({ text: "Hello world.", sourceUrl: "https://youtu.be/a" }); assert.equal(t.provenance.method, "manual-paste"); assert.equal(t.videoId, "a"); assert.throws(() => Import.transcript({ text: "" }), /required/); });
+test("metadata preserves observation provenance and numeric unknowns", () => { const m = Import.metadata({ url: "https://youtu.be/a", views: "100", durationSeconds: "bad" }); assert.equal(m.views, 100); assert.equal(m.durationSeconds, null); assert.equal(m.provenance.method, "manual-entry"); });
+test("analysis labels limitations and does not claim retention evidence", () => { const t = Import.transcript({ text: "Why does this work? Here is the setup. Watch next for more.", sourceUrl: "https://youtu.be/a" }); const a = Analysis.analyze(t); assert.equal(a.openLoops.length, 1); assert.equal(a.ctaCandidates.length, 1); assert.match(a.limitations.join(" "), /do not establish causation/); });
+test("video passport joins metadata and transcript provenance", () => { const t = Import.transcript({ text: "Opening. Middle. End.", sourceUrl: "https://youtu.be/a" }); const m = Import.metadata({ url: "https://youtu.be/a", title: "Test" }); const p = Analysis.passport(m, t); assert.equal(p.metadata.title, "Test"); assert.equal(p.provenance.transcript.method, "manual-paste"); });

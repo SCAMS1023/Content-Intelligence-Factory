@@ -7,6 +7,17 @@
   const { el, clear, replace, $, $$, copyText, download } = T.Dom;
 
   const store = T.Store.create();
+  const backups = T.BackupService.create();
+  const tiktokServices = T.TikTokShopServices.create(T);
+  let sharedDatabase = null;
+  try {
+    sharedDatabase = T.DatabaseRepository.create(window.localStorage);
+    T.LegacyMigration.run(window.localStorage, sharedDatabase);
+  } catch (storageError) {
+    /* The legacy Store already falls back to memory in private/file modes.
+       Shared persistence is an extension, so failure must never block boot. */
+    sharedDatabase = T.DatabaseRepository.create(T.VersionedStorage.memoryAdapter());
+  }
 
   const state = {
     pack: null,
@@ -679,6 +690,30 @@
       return;
     }
     download("tiktok_shop_library.csv", T.Exporters.libraryCsv(list), "text/csv");
+  });
+
+  $("exportBackup").addEventListener("click", function () {
+    try {
+      const stamp = new Date().toISOString().slice(0, 10);
+      download("content-intelligence-factory-backup-" + stamp + ".json", backups.exportText(), "application/json");
+      toast("Full local backup exported.");
+    } catch (error) { toast(error.message || String(error), "warn"); }
+  });
+
+  $("importBackup").addEventListener("click", function () { $("backupFile").click(); });
+  $("backupFile").addEventListener("change", function (event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (file.size > T.BackupService.MAX_IMPORT_BYTES) { toast("Backup exceeds the 4 MB safety limit.", "warn"); event.target.value = ""; return; }
+    const reader = new FileReader();
+    reader.onload = function () {
+      const result = backups.restore(String(reader.result || ""));
+      if (!result.ok) toast("Backup rejected: " + result.error, "warn");
+      else { toast("Backup restored. Reloading…"); setTimeout(function () { window.location.reload(); }, 500); }
+      event.target.value = "";
+    };
+    reader.onerror = function () { toast("The backup file could not be read.", "warn"); event.target.value = ""; };
+    reader.readAsText(file);
   });
 
   $("emptyTrash").addEventListener("click", function () {

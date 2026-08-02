@@ -8,7 +8,6 @@
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
-const url = require("node:url");
 
 const ROOT = path.resolve(__dirname, "..");
 const PORT = Number(process.env.PORT) || 4173;
@@ -27,7 +26,7 @@ const TYPES = {
 const server = http.createServer(function (req, res) {
   let pathname;
   try {
-    pathname = decodeURIComponent(url.parse(req.url).pathname);
+    pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
   } catch (e) {
     res.writeHead(400).end("Bad request");
     return;

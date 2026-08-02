@@ -1,0 +1,10 @@
+"use strict";
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const Engine = require("../src/plugins/analytics/intelligence-engine.js");
+const Analytics = require("../src/plugins/analytics/performance.js");
+test("pattern confidence depends on independent sources and contradictions", () => { const high = Engine.pattern({ name: "Demo", sources: [1,2,3,4,5].map(id => ({ id })) }); const contradicted = Engine.pattern({ name: "Demo", sources: [1,2,3,4,5].map(id => ({ id })), contradictions: ["counterexample"] }); assert.equal(high.confidence, "high"); assert.equal(contradicted.confidence, "medium"); assert.equal(high.causalClaim, false); });
+test("DNA and blueprints retain limitations and inference labels", () => { const p = Engine.pattern({ name: "Question", hookFamily: "question", format: "demo", sources: [{ id: "s1" }] }); const dna = Engine.dna("Creator", [p]); const blueprint = Engine.blueprint([p]); assert.equal(dna.hookFamilies[0], "question"); assert.equal(blueprint.inferred, true); assert.match(dna.limitations[0], /does not prove/); });
+test("performance records calculate profit but retain observed status", () => { const r = Analytics.record({ revenue: 100, productionCost: 35 }); assert.equal(r.metrics.profit, 65); assert.equal(r.inferred, false); });
+test("Pearson correlation handles insufficient and constant samples", () => { assert.equal(Analytics.pearson([{x:1,y:1}]), null); assert.equal(Analytics.pearson([{x:1,y:1},{x:1,y:2},{x:1,y:3}]), null); assert.ok(Analytics.pearson([{x:1,y:2},{x:2,y:4},{x:3,y:6}]) > .99); });
+test("recommendations explicitly reject causal interpretation", () => { const records = [1,2,3].map(n => Analytics.record({ views: n * 100, conversions: n * 2 })); const result = Analytics.recommendation(records, "views", "conversions"); assert.equal(result.relationship, "strong-correlation"); assert.equal(result.causationEstablished, false); assert.match(result.recommendation, /do not treat it as causal/); });

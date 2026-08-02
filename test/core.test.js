@@ -425,9 +425,13 @@ test("video csv has one row per video with distinct prompts", () => {
   assert.ok(new Set(prompts).size > 1, "prompts must vary per row");
 });
 
-test("a formula-injection attempt is quoted, not executed as a cell", () => {
+test("formula-injection prefixes are neutralised before CSV quoting", () => {
   const out = Exporters.csvRows([["=1+1"], ["@SUM(A1)"]]);
-  assert.match(out, /"=1\+1"/);
+  assert.match(out, /"'=1\+1"/);
+  assert.match(out, /"'@SUM\(A1\)"/);
+  ["+cmd", "-2+3", "  =HYPERLINK(\"https://example.invalid\")", "\t@SUM(A1)"].forEach(value => {
+    assert.equal(Exporters.csvCell(value).charAt(1), "'", value);
+  });
 });
 
 test("library csv renders unknown tri-state booleans as 'unknown'", () => {

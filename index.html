@@ -249,6 +249,9 @@
               </select>
             </label>
             <button type="button" id="exportLibrary" class="ghost">Export CSV</button>
+            <button type="button" id="exportBackup" class="ghost">Full backup</button>
+            <button type="button" id="importBackup" class="ghost">Restore backup</button>
+            <input type="file" id="backupFile" accept="application/json,.json" hidden />
           </div>
         </div>
         <p class="hint">Saved on this device only, in browser storage. Nothing is uploaded anywhere. Deleting moves an entry to the trash below so you can undo it.</p>
@@ -271,6 +274,24 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
+  <script src="src/core/event-bus.js"></script>
+  <script src="src/core/feature-flags.js"></script>
+  <script src="src/core/plugin-registry.js"></script>
+  <script src="src/platform/versioned-storage.js"></script>
+  <script src="src/schemas/records.js"></script>
+  <script src="src/platform/backup-service.js"></script>
+  <script src="src/platform/database-repository.js"></script>
+  <script src="src/platform/legacy-migration.js"></script>
+  <script src="src/plugins/tiktok-shop/plugin.js"></script>
+  <script src="src/plugins/tiktok-shop/services.js"></script>
+  <script src="src/plugins/tiktok-shop/intelligence.js"></script>
+  <script src="src/plugins/content-studio/plugin.js"></script>
+  <script src="src/plugins/content-studio/studio.js"></script>
+  <script src="src/plugins/youtube-intelligence/plugin.js"></script>
+  <script src="src/plugins/youtube-intelligence/manual-import.js"></script>
+  <script src="src/plugins/youtube-intelligence/analysis.js"></script>
+  <script src="src/plugins/analytics/intelligence-engine.js"></script>
+  <script src="src/plugins/analytics/performance.js"></script>
   <script src="src/core/rng.js"></script>
   <script src="src/core/validation.js"></script>
   <script src="src/core/scoring.js"></script>

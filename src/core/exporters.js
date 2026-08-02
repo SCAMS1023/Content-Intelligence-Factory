@@ -17,7 +17,14 @@
 
   function csvCell(v) {
     if (v === null || v === undefined) return '""';
-    return '"' + String(v).replace(/"/g, '""') + '"';
+    let value = String(v);
+    /* Excel and other spreadsheet applications may execute a quoted CSV cell
+       when its first non-whitespace character is =, +, - or @. Prefixing an
+       apostrophe keeps user-controlled exports inert while preserving the
+       visible value. Tabs and carriage returns are included because some
+       spreadsheet parsers ignore them before deciding whether to evaluate. */
+    if (/^[\t\r ]*[=+\-@]/.test(value)) value = "'" + value;
+    return '"' + value.replace(/"/g, '""') + '"';
   }
 
   function csvRows(rows) {

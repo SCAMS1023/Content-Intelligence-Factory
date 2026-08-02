@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.1.0 — modular storage foundation
+
+- Added an event bus, feature flags, validated plugin registry, and TikTok Shop plugin metadata.
+- Added versioned storage envelopes, sequential migrations, and in-memory fallback.
+- Added full local backup export and validated atomic restore with rollback.
+- Added shared record collection schemas for products, brands, projects, campaigns, content, research, sources, performance, compliance, and preferences.
+- Added an idempotent, non-destructive migration from legacy TikTok records into the shared database.
+- Added a TikTok service facade for validation, scoring, generation, and compliance.
+- Neutralized CSV spreadsheet-formula prefixes before RFC 4180 escaping.
+- Replaced the static server's legacy URL parser with the WHATWG URL API.
+- Expanded the automated suite from 65 to 74 tests.
+- Added expanded TikTok intelligence models for evidence, scoring profiles, batch CSV intake, lifecycle, watchlists, campaigns, duplicates, and testing plans.
+- Added Content Studio foundations for profiles, presets, deterministic variants, locks, history, batches, and optional provider adapters.
+- Added YouTube manual URL, metadata, and transcript intake with provenance and text-analysis limitations.
+- Added cross-platform pattern intelligence and performance correlation services that explicitly reject causal interpretation.
+- Expanded the automated suite to 103 tests.
+
 ## 2.0.0 — rebuild
 
 Complete rebuild of the local MVP. Same premise, same zero-install constraint
