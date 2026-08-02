@@ -555,8 +555,7 @@
 
   function setView(view) {
     state.view = view;
-    $("view-workbench").hidden = view !== "workbench";
-    $("view-library").hidden = view !== "library";
+    $$(".view").forEach(function (section) { section.hidden = section.id !== "view-" + view; });
     $$(".viewbtn").forEach(function (b) {
       const on = b.dataset.view === view;
       b.classList.toggle("is-active", on);
@@ -564,6 +563,20 @@
       else b.removeAttribute("aria-current");
     });
     if (view === "library") renderLibrary();
+    if (view === "overview") renderOverview();
+    if (view === "analytics") renderAnalytics();
+  }
+
+  function metric(label, value) { return el("div", { class: "metric-card" }, [el("strong", { text: String(value) }), el("span", { text: label })]); }
+  function renderOverview() {
+    const db = sharedDatabase.read();
+    replace($("overviewMetrics"), [metric("Products", db.products.length), metric("Content packs", db.contentPacks.length), metric("Research records", db.research.length), metric("Sources", db.sources.length), metric("Performance records", db.performance.length), metric("Campaigns", db.campaigns.length)]);
+  }
+  function renderAnalytics() {
+    const records = sharedDatabase.list("performance");
+    const totalViews = records.reduce(function (n, r) { return n + Number(r.metrics && r.metrics.views || 0); }, 0);
+    const conversions = records.reduce(function (n, r) { return n + Number(r.metrics && r.metrics.conversions || 0); }, 0);
+    replace($("analyticsSummary"), [metric("Performance records", records.length), metric("Observed views", totalViews), metric("Observed conversions", conversions)]);
   }
 
   function setTab(tab, focus) {
@@ -744,6 +757,27 @@
         $("draftNote").textContent = "Draft saved locally.";
       }, 600);
     });
+  });
+
+  $("studioForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const variant = T.ContentStudio.generate({ subject: $("studioSubject").value, benefit: $("studioBenefit").value, audience: $("studioAudience").value }, { seed: Date.now(), preset: { platform: $("studioPlatform").value, tone: $("studioTone").value } });
+    sharedDatabase.upsert("contentPacks", variant);
+    replace($("studioOutput"), el("div", { class: "output-stack" }, [el("h2", { text: variant.title }), el("h3", { text: "Hook" }), el("p", { text: variant.hook }), el("h3", { text: "Caption" }), el("p", { text: variant.caption }), el("h3", { text: "Voiceover" }), el("pre", { text: variant.voiceover }), el("p", { class: "hint", text: "Inferred deterministic draft — verify all factual claims before use." })]));
+    toast("Content variant saved locally.");
+  });
+
+  $("youtubeForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    try {
+      const transcript = T.YouTubeManualImport.transcript({ text: $("youtubeTranscript").value, sourceUrl: $("youtubeUrl").value });
+      const metadata = T.YouTubeManualImport.metadata({ title: $("youtubeTitle").value, url: $("youtubeUrl").value });
+      const passport = T.YouTubeAnalysis.passport(metadata, transcript);
+      sharedDatabase.upsert("sources", { id: transcript.id, type: "youtube-transcript", url: transcript.sourceUrl, provenance: transcript.provenance, importedAt: transcript.importedAt });
+      sharedDatabase.upsert("research", passport);
+      replace($("youtubeOutput"), el("div", { class: "output-stack" }, [el("h2", { text: metadata.title || "Imported video" }), metric("Transcript words", passport.analysis.wordCount), metric("Estimated minutes", passport.analysis.estimatedMinutes), el("h3", { text: "Opening candidates" }), el("pre", { text: passport.analysis.hookCandidates.join("\n") }), el("h3", { text: "Limitations" }), el("p", { class: "hint", text: passport.analysis.limitations.join(" ") })]));
+      toast("YouTube research saved with provenance.");
+    } catch (error) { toast(error.message || String(error), "warn"); }
   });
 
   /* ---------------------------------------------------------------- boot */

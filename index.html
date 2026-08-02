@@ -24,6 +24,10 @@
         <button type="button" class="viewbtn" data-view="library">
           Library <span class="pill" id="libraryCount" aria-hidden="true">0</span>
         </button>
+        <button type="button" class="viewbtn" data-view="overview">Overview</button>
+        <button type="button" class="viewbtn" data-view="studio">Content Studio</button>
+        <button type="button" class="viewbtn" data-view="youtube">YouTube Research</button>
+        <button type="button" class="viewbtn" data-view="analytics">Analytics</button>
       </nav>
       <button type="button" id="themeToggle" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
     </div>
@@ -265,6 +269,37 @@
         </div>
         <div id="trashList"></div>
       </div>
+    </section>
+
+    <section id="view-overview" class="view" hidden>
+      <div class="panel"><div class="panel-head"><h2>Content Intelligence overview</h2></div><p class="hint">Offline system status and shared-record counts.</p><div id="overviewMetrics" class="metric-grid"></div></div>
+    </section>
+
+    <section id="view-studio" class="view layout" hidden>
+      <form id="studioForm" class="panel form">
+        <div class="panel-head"><h2>Content Studio</h2></div>
+        <div class="field"><label for="studioSubject">Subject</label><input id="studioSubject" required placeholder="Product, topic, or idea" /></div>
+        <div class="field"><label for="studioBenefit">Key benefit</label><input id="studioBenefit" placeholder="What the audience should understand" /></div>
+        <div class="field"><label for="studioAudience">Audience</label><input id="studioAudience" placeholder="Who this is for" /></div>
+        <div class="row"><div class="field"><label for="studioPlatform">Platform</label><select id="studioPlatform"><option value="tiktok">TikTok</option><option value="shorts">YouTube Shorts</option><option value="youtube">YouTube</option><option value="instagram">Instagram</option></select></div><div class="field"><label for="studioTone">Tone</label><select id="studioTone"><option>clear</option><option>conversational</option><option>energetic</option><option>educational</option><option>direct</option></select></div></div>
+        <button type="submit" class="primary">Generate offline variant</button>
+      </form>
+      <div class="results"><div id="studioOutput" class="panel empty-state"><h2>No variant yet</h2><p>Generate deterministic content without an API key.</p></div></div>
+    </section>
+
+    <section id="view-youtube" class="view layout" hidden>
+      <form id="youtubeForm" class="panel form">
+        <div class="panel-head"><h2>YouTube manual import</h2></div>
+        <div class="field"><label for="youtubeUrl">Video URL</label><input id="youtubeUrl" type="url" required placeholder="https://youtu.be/…" /></div>
+        <div class="field"><label for="youtubeTitle">Title</label><input id="youtubeTitle" placeholder="Optional observed title" /></div>
+        <div class="field"><label for="youtubeTranscript">Transcript</label><textarea id="youtubeTranscript" rows="12" required placeholder="Paste a transcript here. Nothing is downloaded automatically."></textarea></div>
+        <button type="submit" class="primary">Import and analyze</button>
+      </form>
+      <div class="results"><div id="youtubeOutput" class="panel empty-state"><h2>No research imported</h2><p>Manual imports preserve source provenance and never claim unsupported scraping.</p></div></div>
+    </section>
+
+    <section id="view-analytics" class="view" hidden>
+      <div class="panel"><div class="panel-head"><h2>Analytics</h2></div><p class="hint">Manual performance records and correlation-only recommendations.</p><div id="analyticsSummary" class="metric-grid"></div><p class="hint tight">Correlations do not establish causation. Use them to design controlled follow-up tests.</p></div>
     </section>
   </main>
 

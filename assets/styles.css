@@ -158,6 +158,13 @@ main { max-width: 1440px; margin: 0 auto; padding: 8px 24px 40px; }
 }
 
 .results { display: grid; gap: 20px; min-width: 0; }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.metric-card { background: var(--panel-2); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 14px; }
+.metric-card strong { display: block; font-size: 24px; color: var(--accent); }
+.metric-card span { color: var(--muted); font-size: 12px; }
+.output-stack { display: grid; gap: 12px; }
+.output-stack h3 { font-size: 15px; }
+.output-stack pre { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--panel-2); padding: 12px; border-radius: var(--radius-sm); }
 
 .panel {
   background: var(--panel);
