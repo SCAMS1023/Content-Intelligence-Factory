@@ -1,0 +1,10 @@
+"use strict";
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const Ops = require("../src/core/operations.js");
+test("projects and campaigns normalize workflow status", () => { assert.equal(Ops.project({ name: " Launch ", status: "bad" }).status, "idea"); assert.equal(Ops.campaign({ name: "C", status: "approved" }).status, "approved"); });
+test("workflow transitions are forward-only except archive", () => { const item = Ops.project({ status: "researching" }); assert.equal(Ops.transition(item, "approved").status, "approved"); assert.throws(() => Ops.transition(item, "idea"), /backwards/); assert.equal(Ops.transition(item, "archived").status, "archived"); });
+test("calendar slots require content and valid dates", () => { assert.equal(Ops.schedule({ contentId: "c1", scheduledAt: "2026-08-02T12:00:00Z" }).timezone, "UTC"); assert.throws(() => Ops.schedule({ scheduledAt: "bad" }), /contentId/); });
+test("false-positive compliance overrides require reasons", () => { assert.throws(() => Ops.complianceReview({ status: "false-positive" }), /reason/); assert.equal(Ops.complianceReview({ status: "false-positive", overrideReason: "Context reviewed" }).status, "false-positive"); });
+test("performance comparisons keep sample size and reject causation", () => { const records = [{ dimensions: { hook: "demo" }, metrics: { views: 100 } }, { dimensions: { hook: "demo" }, metrics: { views: 300 } }, { dimensions: { hook: "pov" }, metrics: { views: 50 } }]; const out = Ops.compare(records, "hook", "views"); assert.equal(out[0].average, 200); assert.equal(out[0].observations, 2); assert.equal(out[0].causationEstablished, false); });
+test("project export includes related records and explicit limitation", () => { const p = Ops.project({ id: "p1", campaignIds: ["c1"], contentIds: ["x1"] }); const out = Ops.exportProject(p, { campaigns: [{ id: "c1" }], contentPacks: [{ id: "x1" }], sources: [{ id: "s1" }], compliance: [{ contentId: "x1" }] }); assert.equal(out.campaigns.length, 1); assert.equal(out.contentPacks.length, 1); assert.match(out.note, /do not establish causation/); });
