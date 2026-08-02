@@ -1,4 +1,8 @@
-# TikTok Shop Video Factory
+# Content Intelligence Factory
+
+Offline-first product intelligence, content generation, YouTube research, operations, compliance, and performance analysisâ€”built around the original TikTok Shop Video Factory.
+
+The original TikTok workflow remains fully available in **Workbench**. New modular routes include Overview, Content Studio, YouTube Research, Analytics, Operations, and System Health.
 
 Score a TikTok Shop product, generate ten complete short-form video units, and export a production pack.
 
@@ -8,7 +12,7 @@ Runs entirely in your browser. No install, no account, no API key, no network re
 
 ## Start it
 
-1. Open `index.html` — double-click it, or drag it into a browser.
+1. Open `index.html` â€” double-click it, or drag it into a browser.
 2. Press **Load sample** to see a filled-in example.
 3. Replace the sample with your own product data.
 4. Press **Generate production pack**.
@@ -32,7 +36,7 @@ Then open <http://localhost:4173>. Requires Node, uses no dependencies.
 
 ## What you get
 
-**An opportunity score, 0–100, with the arithmetic shown.** Seven weighted factors,
+**An opportunity score, 0â€“100, with the arithmetic shown.** Seven weighted factors,
 each contributing a stated number of points, each labelled observed or unknown.
 
 **A confidence figure.** Blank fields are treated as *unknown*, not as zero. They
@@ -48,7 +52,7 @@ line of copy:
 | Hook | The opening line, written to one of ten distinct archetypes |
 | Intent | Why that archetype works, so you can shoot it deliberately |
 | Caption | Matched to the hook, not drawn from an unrelated list |
-| Shot script | Three beats — 0:00–0:02, 0:02–0:07, 0:07–0:10 — with camera direction and the line to say |
+| Shot script | Three beats â€” 0:00â€“0:02, 0:02â€“0:07, 0:07â€“0:10 â€” with camera direction and the line to say |
 | Overlay text | Top and bottom on-screen text |
 | B-roll note | What the supporting footage needs to do |
 | Hashtags | Product-specific plus category tags |
@@ -64,7 +68,7 @@ and expectation vs reality.
 families so you aren't testing two similar hooks back to back.
 
 **A claim-risk check.** Scans both what you typed and everything generated from it
-for the claim categories that get affiliate videos pulled — medical, body, earnings,
+for the claim categories that get affiliate videos pulled â€” medical, body, earnings,
 unprovable absolutes, fabricated urgency, competitor disparagement, false official
 status. Each finding says what tripped, why it matters, and how to reword it.
 
@@ -84,19 +88,19 @@ brief, full JSON, per-tab plain text, and a print stylesheet.
 
 | Factor | Weight | Notes |
 | --- | ---: | --- |
-| Commission per sale | 25 | `price × commission%`. The real income driver. |
+| Commission per sale | 25 | `price Ã— commission%`. The real income driver. |
 | Demand trend (7d) | 18 | Negative growth scores below flat. |
 | Creator competition | 18 | Fewer is better. Over 600 is flagged as saturated. |
-| Price band | 12 | Banded, not monotonic — see below. |
+| Price band | 12 | Banded, not monotonic â€” see below. |
 | Seller authenticity | 10 | A confirmed mismatch caps the total score at 39. |
 | Brand ad support | 9 | |
 | Rating | 8 | Below 4.0 warns about returns and clawbacks. |
 
-**Price is scored as a band on purpose.** The $25–$120 impulse range scores full
-marks; a $349 appliance scores 0.15× because it converts far worse on
+**Price is scored as a band on purpose.** The $25â€“$120 impulse range scores full
+marks; a $349 appliance scores 0.15Ã— because it converts far worse on
 short-form. Rewarding price monotonically overrates expensive products.
 
-Ratings: 80+ strong, 60–79 test, 40–59 weak, below 40 skip. Under 40% confidence
+Ratings: 80+ strong, 60â€“79 test, 40â€“59 weak, below 40 skip. Under 40% confidence
 the app reports *Not enough data* rather than a rating it can't support.
 
 ---
@@ -120,11 +124,11 @@ before you post, and keep the dated screenshots.
 ```
 index.html              Markup and script order
 assets/styles.css       Theming (light/dark/auto), responsive, print
-src/core/               Pure logic — no DOM, unit tested
+src/core/               Pure logic â€” no DOM, unit tested
   rng.js                Seeded RNG so copy varies but reproduces
   validation.js         Parsing; blank means unknown, not zero
   scoring.js            Weighted rubric, breakdown, confidence, projection
-  content.js            Ten archetypes → ten complete video units
+  content.js            Ten archetypes â†’ ten complete video units
   prompts.js            Per-video image/video prompts with fidelity constraints
   compliance.js         Claim-risk scanner and checklist
   pack.js               Assembles the full pack
@@ -164,3 +168,4 @@ export that repeated one prompt across all ten rows, scoring that rated a $349
 product above a $60 one, ten hooks that were identical for every product, and
 generated urgency claims its own checklist prohibited. All of those are fixed and
 covered by tests.
+
