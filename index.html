@@ -28,6 +28,8 @@
         <button type="button" class="viewbtn" data-view="studio">Content Studio</button>
         <button type="button" class="viewbtn" data-view="youtube">YouTube Research</button>
         <button type="button" class="viewbtn" data-view="analytics">Analytics</button>
+        <button type="button" class="viewbtn" data-view="operations">Operations</button>
+        <button type="button" class="viewbtn" data-view="health">System Health</button>
       </nav>
       <button type="button" id="themeToggle" class="icon-btn" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
     </div>
@@ -301,6 +303,28 @@
     <section id="view-analytics" class="view" hidden>
       <div class="panel"><div class="panel-head"><h2>Analytics</h2></div><p class="hint">Manual performance records and correlation-only recommendations.</p><div id="analyticsSummary" class="metric-grid"></div><p class="hint tight">Correlations do not establish causation. Use them to design controlled follow-up tests.</p></div>
     </section>
+
+    <section id="view-operations" class="view layout" hidden>
+      <div>
+        <form id="projectForm" class="panel">
+          <div class="panel-head"><h2>New project</h2></div>
+          <div class="field"><label for="projectName">Project name</label><input id="projectName" required /></div>
+          <div class="field"><label for="projectDescription">Description</label><textarea id="projectDescription" rows="3"></textarea></div>
+          <button class="primary" type="submit">Create project</button>
+        </form>
+        <form id="performanceForm" class="panel">
+          <div class="panel-head"><h2>Record performance</h2></div>
+          <div class="row"><div class="field"><label for="perfPlatform">Platform</label><select id="perfPlatform"><option>tiktok</option><option>youtube</option><option>instagram</option></select></div><div class="field"><label for="perfHook">Hook family</label><input id="perfHook" /></div></div>
+          <div class="row"><div class="field"><label for="perfViews">Views</label><input id="perfViews" inputmode="numeric" /></div><div class="field"><label for="perfConversions">Conversions</label><input id="perfConversions" inputmode="numeric" /></div></div>
+          <button class="primary" type="submit">Save observation</button>
+        </form>
+      </div>
+      <div class="results"><div class="panel"><div class="panel-head"><h2>Production queue</h2><button id="exportOperations" type="button" class="ghost">Export projects</button></div><div id="operationsList"></div></div></div>
+    </section>
+
+    <section id="view-health" class="view" hidden>
+      <div class="panel"><div class="panel-head"><h2>System health</h2></div><div id="healthMetrics" class="metric-grid"></div><div id="healthDetails" class="output-stack"></div></div>
+    </section>
   </main>
 
   <footer class="foot">
@@ -338,6 +362,7 @@
   <script src="src/core/exporters.js"></script>
   <script src="src/core/store.js"></script>
   <script src="src/ui/dom.js"></script>
+  <script src="src/ui/operations-ui.js"></script>
   <script src="src/ui/app.js"></script>
 </body>
 </html>

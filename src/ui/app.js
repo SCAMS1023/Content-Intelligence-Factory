@@ -565,6 +565,8 @@
     if (view === "library") renderLibrary();
     if (view === "overview") renderOverview();
     if (view === "analytics") renderAnalytics();
+    if (view === "operations" && operationsUI) operationsUI.render();
+    if (view === "health" && operationsUI) operationsUI.health();
   }
 
   function metric(label, value) { return el("div", { class: "metric-card" }, [el("strong", { text: String(value) }), el("span", { text: label })]); }
@@ -779,6 +781,8 @@
       toast("YouTube research saved with provenance.");
     } catch (error) { toast(error.message || String(error), "warn"); }
   });
+
+  const operationsUI = T.OperationsUI.mount({ T: T, database: sharedDatabase, backups: backups, toast: toast, metric: metric });
 
   /* ---------------------------------------------------------------- boot */
 
